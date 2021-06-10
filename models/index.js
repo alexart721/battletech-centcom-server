@@ -4,7 +4,7 @@ const { DATABASE_URL } = process.env;
 const { Sequelize } = require('sequelize');
 
 // const sequelize = new Sequelize(`${DATABASE_URL}`); // Comment out for Heroku commits
-const sequelize = new Sequelize(`${DATABASE_URL}?sslmode=require`); // Use for Heroku commits
+const sequelize = new Sequelize(`${DATABASE_URL}`, { ssl: { rejectUnauthorized: false } }); // Use for Heroku commits
 
 sequelize.authenticate().then(res => {
   console.log('Connection established to btcentcomdb!');
