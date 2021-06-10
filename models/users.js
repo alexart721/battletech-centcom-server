@@ -2,10 +2,23 @@ const sequelize = require('./index');
 const { DataTypes } = require('sequelize');
 
 const User = sequelize.define('User', {
-  firstName: DataTypes.TEXT,
-  lastName: DataTypes.TEXT,
-  email: DataTypes.TEXT,
-  password: DataTypes.TEXT
+  firstName: {
+    type: DataTypes.TEXT,
+    allowNull: false
+  },
+  lastName: {
+    type: DataTypes.TEXT,
+    allowNull: false
+  },
+  email: {
+    type: DataTypes.TEXT,,
+    allowNull: false,
+    unique: true
+  },
+  password: {
+    type: DataTypes.TEXT,
+    allowNull: false
+  }
 });
 
 User.sync();
