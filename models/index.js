@@ -1,9 +1,10 @@
-// const path = require('path');
-// require('dotenv').config({ path: path.join(__dirname, '..', '/.env') });
+// const path = require('path'); // Comment out for Heroku commits
+// require('dotenv').config({ path: path.join(__dirname, '..', '/.env') }); // Comment out for Heroku commits
 const { DATABASE_URL } = process.env;
 const { Sequelize } = require('sequelize');
 
-const sequelize = new Sequelize(`${DATABASE_URL}`);
+// const sequelize = new Sequelize(`${DATABASE_URL}`); // Comment out for Heroku commits
+const sequelize = new Sequelize(`${DATABASE_URL}`, { ssl: true }); // Use for Heroku commits
 
 sequelize.authenticate().then(res => {
   console.log('Connection established to btcentcomdb!');

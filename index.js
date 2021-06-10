@@ -1,5 +1,5 @@
-// const path = require('path');
-// require('dotenv').config({ path: path.join(__dirname, '/.env') });
+// const path = require('path'); // Comment out for Heroku commits
+// require('dotenv').config({ path: path.join(__dirname, '/.env') }); // Comment out for Heroku commits
 const express = require('express');
 const app = express();
 const cors = require('cors');
