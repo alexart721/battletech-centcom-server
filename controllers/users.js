@@ -7,7 +7,6 @@ const { SECRET_KEY } = process.env;
 
 const getUser = async (req, res) => {
   try {
-    console.log('In controller, getUser', req.user);
     const { email } = req.user;
     const { firstName, lastName } = await User.findOne({ where: { email: email } });
     const user = { firstName, lastName, email };
@@ -46,7 +45,6 @@ const login = async (req, res) => {
   const { email, password } = req.body;
   try {
     const user = await User.findOne({ where: { email: email } });
-    console.log('In controller, login', user);
     const validatedPass = await bcrypt.compare(password, user.password);
     if (!validatedPass) throw new Error();
     const accessToken = jwt.sign({ id: user.id }, SECRET_KEY);
