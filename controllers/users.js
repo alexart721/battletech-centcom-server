@@ -1,6 +1,4 @@
 const User = require('../models/users');
-// const path = require('path'); // Comment out for Heroku commits
-// require('dotenv').config({ path: path.join(__dirname, '..', '/.env') }); // Comment out for Heroku commits
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const redisClient = require('../models/redis');
@@ -60,7 +58,11 @@ const login = async (req, res) => {
 const logout = async (req, res) => {
   const { token, tokenExp } = req;
   try {
-    redisClient.setex(`blacklist_${token}`, tokenExp, true);
+    // JWT expire time is in seconds to expire time since Epoch
+    // Redis setex takes expire time in seconds
+    // Need to set by taking difference from now to exp in seconds
+    const timeToExpire = tokenExp - Math.floor(Date.now() / 1000);
+    redisClient.setex(`blacklist_${token}`, timeToExpire, true);
     res.status(200).send({ message: 'Logout successful!' });
   } catch (err) {
     res.status(400).send({ err, message: 'System error, logging out.' });

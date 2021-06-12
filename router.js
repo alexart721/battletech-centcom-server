@@ -3,12 +3,6 @@ const router = express.Router();
 const { getUser, createUser, login, logout } = require('./controllers');
 const authMiddleware = require('./middlewares/auth');
 
-// Used for Heroku deployment testing
-// router.get('/', (req, res) => {
-//   res.status(200);
-//   res.send('Hello, stranger!');
-// });
-
 router.get('/profile', authMiddleware, getUser);
 router.post('/register', createUser);
 router.post('/login', login);
