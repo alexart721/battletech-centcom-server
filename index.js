@@ -5,7 +5,8 @@ const router = require('./router');
 const PORT = process.env.PORT || 3000;
 
 const corsConfig = {
-  origin: 'http://localhost:3000',
+  origin: 'https://battletech-centcom-client.vercel.app', // For Heroku deployment
+  // origin: 'http://localhost:3000', // For local testing
   credentials: true
 };
 
