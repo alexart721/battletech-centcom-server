@@ -2,7 +2,14 @@ const { DATABASE_URL, DB } = process.env;
 const { Sequelize } = require('sequelize');
 
 // const sequelize = new Sequelize(`${DATABASE_URL}`); // For local testing
-const sequelize = new Sequelize(`${DATABASE_URL}`, { dialectOptions: { ssl: true } }); // For Heroku deployment
+const sequelize = new Sequelize(`${DATABASE_URL}`, {
+  dialectOptions: {
+    ssl: {
+      require: true,
+      rejectUnauthorized: false
+    }
+  }
+}); // For Heroku deployment
 
 sequelize.authenticate().then(res => {
   console.log(`Connection established to ${DB}!`);
