@@ -1,10 +1,5 @@
 const sequelize = require('./index');
 const { DataTypes } = require('sequelize');
-const Campaign = require('./campaigns');
-const PilotMechPair = require('./pilotMechPairs');
-const Pilot = require('./pilots');
-const TurnDetail = require('./turnDetails');
-const Turn = require('./turns');
 
 const Mech = sequelize.define('Mech', {
   name: {
@@ -57,11 +52,10 @@ const Mech = sequelize.define('Mech', {
     defaultValue: 1,
     allowNull: false
   }
+}, {
+  tableName: 'Mechs'
 });
 
-Mech.belongsTo(Campaign);
-Mech.belongsToMany(Pilot, { through: PilotMechPair });
-Mech.belongsToMany(Turn, { through: TurnDetail });
 Mech.sync({ alter: true });
 
 module.exports = Mech;

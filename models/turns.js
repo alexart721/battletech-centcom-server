@@ -1,8 +1,5 @@
 const sequelize = require('./index');
 const { DataTypes } = require('sequelize');
-const Operation = require('./operations');
-const TurnDetail = require('./turnDetails');
-const Mech = require('./mechs');
 
 const Turn = sequelize.define('Turn', {
   turnNum: {
@@ -16,8 +13,6 @@ const Turn = sequelize.define('Turn', {
   }
 });
 
-Turn.belongsTo(Operation);
-Turn.belongsToMany(Mech, { through: TurnDetail });
 Turn.sync({ alter: true });
 
 module.exports = Turn;

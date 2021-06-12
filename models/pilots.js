@@ -1,9 +1,5 @@
 const sequelize = require('./index');
 const { DataTypes } = require('sequelize');
-const User = require('./users');
-const Campaign = require('./campaigns');
-const PilotMechPair = require('./pilotMechPairs');
-const Mech = require('./mechs');
 
 const Pilot = sequelize.define('Pilot', {
   firstName: {
@@ -45,9 +41,6 @@ const Pilot = sequelize.define('Pilot', {
   }
 });
 
-Pilot.belongsTo(User);
-Pilot.belongsTo(Campaign);
-Pilot.belongsToMany(Mech, { through: PilotMechPair });
 Pilot.sync({ alter: true });
 
 module.exports = Pilot;

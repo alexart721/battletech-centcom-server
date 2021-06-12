@@ -1,8 +1,9 @@
 const User = require('../models/users');
-const path = require('path'); // Comment out for Heroku commits
-require('dotenv').config({ path: path.join(__dirname, '..', '/.env') }); // Comment out for Heroku commits
+// const path = require('path'); // Comment out for Heroku commits
+// require('dotenv').config({ path: path.join(__dirname, '..', '/.env') }); // Comment out for Heroku commits
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
+const redisClient = require('../models/redis');
 const { SECRET_KEY } = process.env;
 
 const getUser = async (req, res) => {
@@ -34,7 +35,7 @@ const createUser = async (req, res) => {
       ...req.body,
       password: hashPassword
     });
-    const accessToken = jwt.sign({ id }, SECRET_KEY);
+    const accessToken = jwt.sign({ id }, SECRET_KEY, { expiresIn: '1h' });
     res.status(201).send({ accessToken });
   } catch (err) {
     res.status(400).send({ err, message: 'Could not create user' });
@@ -47,7 +48,7 @@ const login = async (req, res) => {
     const user = await User.findOne({ where: { email: email } });
     const validatedPass = await bcrypt.compare(password, user.password);
     if (!validatedPass) throw new Error();
-    const accessToken = jwt.sign({ id: user.id }, SECRET_KEY);
+    const accessToken = jwt.sign({ id: user.id }, SECRET_KEY, { expiresIn: '1h' });
     res.status(200).send({ accessToken });
   } catch (error) {
     res
@@ -56,8 +57,19 @@ const login = async (req, res) => {
   }
 }
 
+const logout = async (req, res) => {
+  const { token, tokenExp } = req;
+  try {
+    redisClient.setex(`blacklist_${token}`, tokenExp, true);
+    res.status(200).send({ message: 'Logout successful!' });
+  } catch (err) {
+    res.status(400).send({ err, message: 'System error, logging out.' });
+  }
+}
+
 module.exports = {
   getUser,
   createUser,
-  login
+  login,
+  logout
 }
