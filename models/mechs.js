@@ -24,6 +24,10 @@ const Mech = sequelize.define('Mech', {
       isIn: [[1, 2, 3, 4]]
     }
   },
+  cost: {
+    type: DataTypes.INTEGER,
+    allowNull: false
+  },
   movement: {
     type: DataTypes.INTEGER,
     allowNull: false

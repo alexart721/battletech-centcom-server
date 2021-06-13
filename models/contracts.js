@@ -6,6 +6,7 @@ const Contract = sequelize.define('Contract', {
     type: DataTypes.STRING,
     allowNull: false
   },
+  objectives: DataTypes.ARRAY(DataTypes.STRING),
   startDate: DataTypes.DATE,
   endDate: DataTypes.DATE
 });
