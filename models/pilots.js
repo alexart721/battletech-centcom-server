@@ -41,6 +41,6 @@ const Pilot = sequelize.define('Pilot', {
   }
 });
 
-Pilot.sync({ alter: true });
+Pilot.sync();
 
 module.exports = Pilot;

@@ -11,9 +11,9 @@ const getUser = async (req, res) => {
     const user = { firstName, lastName, email };
     res.status(200);
     res.send(user);
-  } catch (err) {
+  } catch (error) {
     res.status(500);
-    res.send(err);
+    res.send({ error, message: 'Could not get user.' });
   }
 }
 
@@ -35,12 +35,34 @@ const createUser = async (req, res) => {
     });
     const accessToken = jwt.sign({ id }, SECRET_KEY, { expiresIn: '1h' });
     res.status(201).send({ accessToken });
-  } catch (err) {
-    res.status(400).send({ err, message: 'Could not create user' });
+  } catch (error) {
+    res.status(400).send({ error, message: 'Could not create user' });
+  }
+}
+
+const updateUser = async (req, res) => {
+  try {
+    const { id } = req.user;
+    const user = await User.findOne({ where: { id: id } });
+    const { firstName, lastName, email, password } = req.body;
+    user.firstName = firstName;
+    user.lastName = lastName;
+    user.email = email;
+    if (password !== '') {
+      const hashPassword = await bcrypt.hash(password, 10);
+      user.password = hashPassword;
+    }
+    await user.save();
+    res.status(200);
+    res.send(user);
+  } catch (error) {
+    res.status(500);
+    res.send({ error, message: 'Could not update user.' });
   }
 }
 
 const login = async (req, res) => {
+  console.log('users controller login', req.body);
   const { email, password } = req.body;
   try {
     const user = await User.findOne({ where: { email: email } });
@@ -48,10 +70,9 @@ const login = async (req, res) => {
     if (!validatedPass) throw new Error();
     const accessToken = jwt.sign({ id: user.id }, SECRET_KEY, { expiresIn: '1h' });
     res.status(200).send({ accessToken });
-  } catch (error) {
-    res
-      .status(401)
-      .send({ error: '401', message: 'Username or password is incorrect' });
+  } catch (err) {
+    console.log('catch block');
+    res.status(401).send({ error: '401', message: 'Username or password is incorrect' });
   }
 }
 
@@ -64,8 +85,8 @@ const logout = async (req, res) => {
     const timeToExpire = tokenExp - Math.floor(Date.now() / 1000);
     redisClient.setex(`blacklist_${token}`, timeToExpire, true);
     res.status(200).send({ message: 'Logout successful!' });
-  } catch (err) {
-    res.status(400).send({ err, message: 'System error, logging out.' });
+  } catch (error) {
+    res.status(400).send({ error, message: 'System error, logging out.' });
   }
 }
 
@@ -73,5 +94,6 @@ module.exports = {
   getUser,
   createUser,
   login,
-  logout
+  logout,
+  updateUser
 }

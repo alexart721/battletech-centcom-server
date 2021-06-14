@@ -10,6 +10,6 @@ const Campaign = sequelize.define('Campaign', {
   endDate: DataTypes.DATE
 });
 
-Campaign.sync({ alter: true });
+Campaign.sync();
 
 module.exports = Campaign;

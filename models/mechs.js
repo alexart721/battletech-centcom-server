@@ -60,6 +60,6 @@ const Mech = sequelize.define('Mech', {
   tableName: 'Mechs'
 });
 
-Mech.sync({ alter: true });
+Mech.sync();
 
 module.exports = Mech;

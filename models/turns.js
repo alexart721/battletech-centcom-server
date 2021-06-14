@@ -13,6 +13,6 @@ const Turn = sequelize.define('Turn', {
   }
 });
 
-Turn.sync({ alter: true });
+Turn.sync();
 
 module.exports = Turn;

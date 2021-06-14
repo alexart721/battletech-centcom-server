@@ -10,6 +10,6 @@ const TurnDetail = sequelize.define('TurnDetail', {
   pilotEdge: DataTypes.INTEGER
 });
 
-TurnDetail.sync({ alter: true });
+TurnDetail.sync();
 
 module.exports = TurnDetail;

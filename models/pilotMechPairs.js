@@ -7,6 +7,6 @@ const PilotMechPair = sequelize.define('PilotMechPair', {
   divorceDate: DataTypes.DATE
 });
 
-PilotMechPair.sync({ alter: true });
+PilotMechPair.sync();
 
 module.exports = PilotMechPair;

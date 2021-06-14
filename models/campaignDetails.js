@@ -20,6 +20,6 @@ const CampaignDetail = sequelize.define('CampaignDetail', {
   }
 });
 
-CampaignDetail.sync({ alter: true });
+CampaignDetail.sync();
 
 module.exports = CampaignDetail;

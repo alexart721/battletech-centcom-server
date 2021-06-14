@@ -11,6 +11,6 @@ const Contract = sequelize.define('Contract', {
   endDate: DataTypes.DATE
 });
 
-Contract.sync({ alter: true });
+Contract.sync();
 
 module.exports = Contract;

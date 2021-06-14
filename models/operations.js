@@ -11,6 +11,6 @@ const Operation = sequelize.define('Operation', {
   endDate: DataTypes.STRING
 });
 
-Operation.sync({ alter: true });
+Operation.sync();
 
 module.exports = Operation;

@@ -4,9 +4,16 @@ const cors = require('cors');
 const router = require('./router');
 const PORT = process.env.PORT || 3000;
 
+const whitelist = ['https://battletech-centcom-client.vercel.app', 'http://localhost:3000'];
+
 const corsConfig = {
-  origin: 'https://battletech-centcom-client.vercel.app', // For Heroku deployment
-  // origin: 'http://localhost:3000', // For local testing
+  origin: function (origin, callback) {
+    if (whitelist.indexOf(origin) !== -1) {
+      callback(null, true)
+    } else {
+      callback(new Error('Not allowed by CORS'))
+    }
+  },
   credentials: true
 };
 
