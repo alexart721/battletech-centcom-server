@@ -1,4 +1,4 @@
-const sequelize = require('./index');
+const { sequelize } = require('./index');
 const { DataTypes } = require('sequelize');
 
 // This is the junction table between pilots and mechs

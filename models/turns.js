@@ -1,4 +1,4 @@
-const sequelize = require('./index');
+const { sequelize } = require('./index');
 const { DataTypes } = require('sequelize');
 
 const Turn = sequelize.define('Turn', {

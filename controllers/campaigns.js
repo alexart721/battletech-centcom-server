@@ -1,5 +1,5 @@
 const Campaign = require('../models/campaigns');
-const CampaignDetail = require('../models/campaignDetails');
+const { Op } = require('../models');
 
 const getCampaign = async (req, res) => {
   try {
@@ -13,22 +13,52 @@ const getCampaign = async (req, res) => {
   }
 }
 
-const getCampaigns = async (req, res) => {
+const getAllCampaigns = async (req, res) => {
   try {
-    const { id } = req.user;
-    const campaigns = Campaign.findAll({
+    const user = req.user;
+    const campaigns = user.getCampaigns();
+    res.status(200);
+    res.send(campaigns);
+  } catch (error) {
+    res.status(500);
+    res.send({ error, message: 'Could not get campaign.' });
+  }
+}
+
+const getCurrentCampaigns = async (req, res) => {
+  try {
+    const user = req.user;
+    const campaigns = await user.getCampaigns({
       where: {
-        '$CampaignDetail.UserId$': id
-      },
-      include: {
-        model: CampaignDetail
+        endDate: {
+          [Op.eq]: null
+        }
+      }
+    });
+    console.log(campaigns);
+    res.status(200);
+    res.send(campaigns);
+  } catch (error) {
+    res.status(500);
+    res.send({ error, message: 'Could not get current campaigns.' });
+  }
+}
+
+const getPastCampaigns = async (req, res) => {
+  try {
+    const user = req.user;
+    const campaigns = await user.getCampaigns({
+      where: {
+        endDate: {
+          [Op.ne]: null
+        }
       }
     });
     res.status(200);
     res.send(campaigns);
   } catch (error) {
     res.status(500);
-    res.send({ error, message: 'Could not get campaign.' });
+    res.send({ error, message: 'Could not get past campaigns.' });
   }
 }
 
@@ -39,8 +69,7 @@ const createCampaign = async (req, res) => {
     const campaign = await Campaign.create({
       ...req.body
     });
-    const result = campaign.addUser(user, { through: { joinDate: startDate } });
-    console.log(result);
+    await campaign.addUser(user, { through: { joinDate: startDate } });
     res.status(201).send(campaign);
   } catch (error) {
     res.status(500);
@@ -67,7 +96,9 @@ const updateCampaign = async (req, res) => {
 
 module.exports = {
   getCampaign,
-  getCampaigns,
+  getAllCampaigns,
+  getCurrentCampaigns,
+  getPastCampaigns,
   createCampaign,
   updateCampaign
 }

@@ -1,4 +1,4 @@
-const sequelize = require('./index');
+const { sequelize } = require('./index');
 const { DataTypes } = require('sequelize');
 
 const Mech = sequelize.define('Mech', {
@@ -55,7 +55,8 @@ const Mech = sequelize.define('Mech', {
     type: DataTypes.INTEGER,
     defaultValue: 1,
     allowNull: false
-  }
+  },
+  imageUrl: DataTypes.STRING
 }, {
   tableName: 'Mechs'
 });
