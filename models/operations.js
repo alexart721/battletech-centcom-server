@@ -6,7 +6,7 @@ const Operation = sequelize.define('Operation', {
     type: DataTypes.STRING,
     allowNull: false
   },
-  objectives: DataTypes.TEXT,
+  objectives: DataTypes.ARRAY(DataTypes.STRING),
   startDate: DataTypes.STRING,
   endDate: DataTypes.STRING
 });

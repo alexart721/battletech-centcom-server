@@ -6,7 +6,8 @@ const {
   createCampaign, updateCampaign, createMech, getAllMechs, getMech,
   getAssignedMech, assignMech, createPilot, getAllPilots, getPilot, getAssignedPilot,
   assignPilot, getContract, getCampaignCurrentContract, getCampaignPastContracts,
-  createContract, updateContract
+  createContract, updateContract, getOperation, getContractCurrentOp, getContractPastOp,
+  createOperation, updateOperation
 } = require('./controllers');
 const authMiddleware = require('./middlewares/auth');
 
@@ -36,8 +37,12 @@ router.get('/contracts/current/:id', authMiddleware, getCampaignCurrentContract)
 router.get('/contracts/past/:id', authMiddleware, getCampaignPastContracts);
 router.post('/contracts/:id', authMiddleware, createContract);
 router.put('/contracts/:id', authMiddleware, updateContract);
+router.get('/ops/:id', authMiddleware, getOperation);
+router.get('/ops/current/:id', authMiddleware, getContractCurrentOp);
+router.get('/ops/past/:id', authMiddleware, getContractPastOp);
+router.post('/ops/:id', authMiddleware, createOperation);
+router.put('/ops/:id', authMiddleware, updateOperation);
 router.get('*', (req, res) => {
-  // Update this to go to custom 404, if time allows
   res.status(404).send('Sorry, not found 😞');
 });
 

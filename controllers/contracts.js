@@ -81,7 +81,6 @@ const updateContract = async (req, res) => {
     contract.objectives = objectives;
     contract.startDate = startDate;
     if (endDate) contract.endDate = endDate;
-    console.log(contract);
     await contract.save();
     res.status(200).send(contract);
   } catch (error) {

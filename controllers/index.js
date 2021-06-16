@@ -5,6 +5,7 @@ const { getCampaign, getAllCampaigns, getCurrentCampaigns, getPastCampaigns, cre
 const { createMech, getAllMechs, getMech, getAssignedMech, assignMech } = require('./mechs');
 const { createPilot, getAllPilots, getPilot, getAssignedPilot, assignPilot } = require('./pilots');
 const { getContract, getCampaignCurrentContract, getCampaignPastContracts, createContract, updateContract } = require('./contracts');
+const { getOperation, getContractCurrentOp, getContractPastOp, createOperation, updateOperation } = require('./operations');
 
 // Set up associations for tables
 associate();
@@ -38,5 +39,10 @@ module.exports = {
   getCampaignCurrentContract,
   getCampaignPastContracts,
   createContract,
-  updateContract
+  updateContract,
+  getOperation,
+  getContractCurrentOp,
+  getContractPastOp,
+  createOperation,
+  updateOperation
 }
