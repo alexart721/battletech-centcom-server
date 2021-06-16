@@ -10,7 +10,7 @@ const { getContract, getCampaignCurrentContract, getCampaignPastContracts, creat
 associate();
 
 // Sync models
-sequelize.sync({ force: true }); // For change { alter: true } or wipe and change { force: true }
+sequelize.sync(); // For change { alter: true } or wipe and change { force: true }
 
 module.exports = {
   getUser,
