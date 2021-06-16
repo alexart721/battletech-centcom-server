@@ -28,6 +28,7 @@ const getAllCampaigns = async (req, res) => {
 const getCurrentCampaigns = async (req, res) => {
   try {
     const user = req.user;
+    // For posterity you should get the user from the database
     const campaigns = await user.getCampaigns({
       where: {
         endDate: {

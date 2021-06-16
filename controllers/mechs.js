@@ -1,5 +1,7 @@
 const Mech = require('../models/mechs');
 const Campaign = require('../models/campaigns');
+const PilotMechPair = require('../models/pilotMechPairs');
+const { Op } = require('../models');
 
 const createMech = async (req, res) => {
   try {
@@ -24,14 +26,49 @@ const getAllMechs = async (req, res) => {
   }
 }
 
+const getMech = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const mech = await Mech.findOne({ where: { id: id } });
+    res.status(200);
+    res.send(mech);
+  } catch (error) {
+    res.status(500);
+    res.send({ error, message: 'Could not get mech.' });
+  }
+}
+
+const getAssignedMech = async (req, res) => {
+  try {
+    const { id } = req.params; // Pilot id
+    // Should only be one pilotMechPair with a divorceDate of null
+    const pilotmechpair = await PilotMechPair.findOne({
+      where: {
+        PilotId: id,
+        divorceDate: {
+          [Op.eq]: null
+        }
+      }
+    });
+    const mech = await Mech.findOne({ where: { id: pilotmechpair.MechId } });
+    console.log(mech);
+    res.status(200);
+    res.send(mech);
+  } catch (error) {
+    console.log(error);
+    res.status(500);
+    res.send({ error, message: 'Could not get mech.' });
+  }
+}
+
 const assignMech = async (req, res) => {
   try {
-    console.log('Here');
     const { id } = req.params;
-    const mech = req.body;
+    const mechReq = req.body;
+    const mech = await Mech.findOne({ where: { id: mechReq.id } });
     const campaign = await Campaign.findOne({ where: { id: id } });
-    console.log(campaign);
-    await campaign.addMech(mech, { through: { unionDate: campaign.startDate } });
+    await campaign.addMech(mech);
+    // await campaign.addMech(mech, { through: { unionDate: campaign.startDate } });
     res.status(201).send(mech);
   } catch (error) {
     res.status(500);
@@ -42,5 +79,7 @@ const assignMech = async (req, res) => {
 module.exports = {
   createMech,
   getAllMechs,
+  getMech,
+  getAssignedMech,
   assignMech
 }
