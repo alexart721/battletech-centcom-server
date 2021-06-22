@@ -16,7 +16,7 @@ const corsConfig = {
   },
   credentials: true
 };
-
+app.get('/', (_, res) => { res.status(200).send('Hello, stranger!') });
 app.use(cors(corsConfig));
 app.use(express.json());
 app.use(router);
