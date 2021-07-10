@@ -1,66 +1,66 @@
-const { sequelize } = require('./index');
-const { DataTypes } = require('sequelize');
+import { DataTypes } from 'sequelize';
+import { sequelize } from './index';
 
 const Mech = sequelize.define('Mech', {
   name: {
     type: DataTypes.STRING,
-    allowNull: false
+    allowNull: false,
   },
   model: {
     type: DataTypes.STRING,
-    allowNull: false
+    allowNull: false,
   },
   status: {
     type: DataTypes.TEXT,
     defaultValue: 'Operational',
     validate: {
-      isIn: [['Operational', 'In for repairs', 'Destroyed']]
-    }
+      isIn: [['Operational', 'In for repairs', 'Destroyed']],
+    },
   },
   size: {
     type: DataTypes.INTEGER,
     allowNull: false,
     validate: {
-      isIn: [[1, 2, 3, 4]]
-    }
+      isIn: [[1, 2, 3, 4]],
+    },
   },
   cost: {
     type: DataTypes.INTEGER,
-    allowNull: false
+    allowNull: false,
   },
   movement: {
     type: DataTypes.INTEGER,
-    allowNull: false
+    allowNull: false,
   },
   jumpCapable: DataTypes.BOOLEAN,
   overHeatLimit: DataTypes.INTEGER,
   damageShort: {
     type: DataTypes.INTEGER,
-    defaultValue: 0
+    defaultValue: 0,
   },
   damageMed: {
     type: DataTypes.INTEGER,
-    defaultValue: 0
+    defaultValue: 0,
   },
   damageLong: {
     type: DataTypes.INTEGER,
-    defaultValue: 0
+    defaultValue: 0,
   },
   armor: {
     type: DataTypes.INTEGER,
     defaultValue: 1,
-    allowNull: false
+    allowNull: false,
   },
   structure: {
     type: DataTypes.INTEGER,
     defaultValue: 1,
-    allowNull: false
+    allowNull: false,
   },
-  imageUrl: DataTypes.STRING
+  imageUrl: DataTypes.STRING,
 }, {
-  tableName: 'Mechs'
+  tableName: 'Mechs',
 });
 
 Mech.sync();
 
-module.exports = Mech;
+export default Mech;

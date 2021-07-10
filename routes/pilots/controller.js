@@ -1,21 +1,20 @@
-const Pilot = require('../models/pilots');
-const Mech = require('../models/mechs');
-const Campaign = require('../models/campaigns');
+import Pilot from '../../models/pilots';
+import Mech from '../../models/mechs';
+import Campaign from '../../models/campaigns';
 
-const createPilot = async (req, res) => {
+export const createPilot = async (req, res) => {
   try {
-    console.log('Pilot', req.body);
     const pilot = await Pilot.create({
-      ...req.body
+      ...req.body,
     });
     res.status(201).send(pilot);
   } catch (error) {
     res.status(500);
     res.send({ error, message: 'Could not create pilot.' });
   }
-}
+};
 
-const getAllPilots = async (req, res) => {
+export const getAllPilots = async (req, res) => {
   try {
     const pilots = await Pilot.findAll();
     res.status(200);
@@ -24,25 +23,24 @@ const getAllPilots = async (req, res) => {
     res.status(500);
     res.send({ error, message: 'Could not get pilots.' });
   }
-}
+};
 
-const getPilot = async (req, res) => {
+export const getPilot = async (req, res) => {
   try {
     const { id } = req.params;
-    const pilot = await Pilot.findOne({ where: { id: id } });
+    const pilot = await Pilot.findOne({ where: { id } });
     res.status(200);
     res.send(pilot);
   } catch (error) {
     res.status(500);
     res.send({ error, message: 'Could not get pilot.' });
   }
-}
+};
 
-const getAssignedPilot = async (req, res) => {
+export const getAssignedPilot = async (req, res) => {
   try {
     const { id } = req.params; // Campaign id
-    console.log(id);
-    const campaign = await Campaign.findOne({ where: { id: id } });
+    const campaign = await Campaign.findOne({ where: { id } });
     const pilot = await campaign.getPilots({ where: { CampaignId: id } });
     // Returns array of pilots, but there will only be one
     res.status(200);
@@ -51,9 +49,9 @@ const getAssignedPilot = async (req, res) => {
     res.status(500);
     res.send({ error, message: 'Could not get pilot.' });
   }
-}
+};
 
-const assignPilot = async (req, res) => {
+export const assignPilot = async (req, res) => {
   try {
     const { cid, mid } = req.params;
     const pilotReq = req.body;
@@ -67,12 +65,4 @@ const assignPilot = async (req, res) => {
     res.status(500);
     res.send({ error, message: 'Could not assign mech.' });
   }
-}
-
-module.exports = {
-  createPilot,
-  getAllPilots,
-  getPilot,
-  getAssignedPilot,
-  assignPilot
-}
+};

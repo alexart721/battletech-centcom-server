@@ -1,16 +1,16 @@
-const { sequelize } = require('./index');
-const { DataTypes } = require('sequelize');
+import { DataTypes } from 'sequelize';
+import { sequelize } from './index';
 
 const Contract = sequelize.define('Contract', {
   name: {
     type: DataTypes.STRING,
-    allowNull: false
+    allowNull: false,
   },
   objectives: DataTypes.ARRAY(DataTypes.STRING),
   startDate: DataTypes.DATE,
-  endDate: DataTypes.DATE
+  endDate: DataTypes.DATE,
 });
 
 Contract.sync();
 
-module.exports = Contract;
+export default Contract;

@@ -1,30 +1,30 @@
-const Contract = require('../models/contracts');
-const Campaign = require('../models/campaigns');
-const { Op } = require('../models');
+import Contract from '../../models/contracts';
+import Campaign from '../../models/campaigns';
+import { Op } from '../../db';
 
-const getContract = async (req, res) => {
+export const getContract = async (req, res) => {
   try {
     const { id } = req.params; // Contract id
-    const contract = await Contract.findOne({ where: { id: id } });
+    const contract = await Contract.findOne({ where: { id } });
     res.status(200);
     res.send(contract);
   } catch (error) {
     res.status(500);
     res.send({ error, message: 'Could not get contract.' });
   }
-}
+};
 
-const getCampaignCurrentContract = async (req, res) => {
+export const getCampaignCurrentContract = async (req, res) => {
   try {
     const { id } = req.params; // Campaign id
-    const campaign = await Campaign.findOne({ where: { id: id } });
+    const campaign = await Campaign.findOne({ where: { id } });
     // Sould only be one contract with null endDate at a time
     const contract = await campaign.getContracts({
       where: {
         endDate: {
-          [Op.eq]: null
-        }
-      }
+          [Op.eq]: null,
+        },
+      },
     });
     res.status(200);
     // Returns array of contracts, but there should only be one
@@ -33,18 +33,18 @@ const getCampaignCurrentContract = async (req, res) => {
     res.status(500);
     res.send({ error, message: 'Could not get current contract.' });
   }
-}
+};
 
-const getCampaignPastContracts = async (req, res) => {
+export const getCampaignPastContracts = async (req, res) => {
   try {
     const { id } = req.params; // Campaign id
-    const campaign = await Campaign.findOne({ where: { id: id } });
+    const campaign = await Campaign.findOne({ where: { id } });
     const contracts = await campaign.getContracts({
       where: {
         endDate: {
-          [Op.ne]: null
-        }
-      }
+          [Op.ne]: null,
+        },
+      },
     });
     res.status(200);
     res.send(contracts);
@@ -52,16 +52,16 @@ const getCampaignPastContracts = async (req, res) => {
     res.status(500);
     res.send({ error, message: 'Could not get past contracts.' });
   }
-}
+};
 
-const createContract = async (req, res) => {
+export const createContract = async (req, res) => {
   try {
     const { id } = req.params; // Campaign id
-    const campaign = await Campaign.findOne({ where: { id: id } });
+    const campaign = await Campaign.findOne({ where: { id } });
     const { name, objectives, startDate } = req.body;
     const newContract = { name, objectives, startDate };
     const contract = await Contract.create({
-      ...newContract
+      ...newContract,
     });
     await campaign.addContract(contract);
     res.status(201).send(contract);
@@ -69,14 +69,15 @@ const createContract = async (req, res) => {
     res.status(500);
     res.send({ error, message: 'Could not create contract.' });
   }
-}
+};
 
-const updateContract = async (req, res) => {
+export const updateContract = async (req, res) => {
   try {
     const { id } = req.params; // Contract id
-    const contract = await Contract.findOne({ where: { id: id } });
-    const { name, objectives, startDate, endDate } = req.body;
-    console.log('req.body: ', req.body);
+    const contract = await Contract.findOne({ where: { id } });
+    const {
+      name, objectives, startDate, endDate,
+    } = req.body;
     contract.name = name;
     contract.objectives = objectives;
     contract.startDate = startDate;
@@ -87,12 +88,4 @@ const updateContract = async (req, res) => {
     res.status(500);
     res.send({ error, message: 'Could not update contract.' });
   }
-}
-
-module.exports = {
-  getContract,
-  getCampaignCurrentContract,
-  getCampaignPastContracts,
-  createContract,
-  updateContract
-}
+};

@@ -1,22 +1,22 @@
-const { DATABASE_URL, DB } = process.env;
-const { Sequelize } = require('sequelize');
-const Op = Sequelize.Op;
+/* eslint-disable no-console */
+import { Sequelize } from 'sequelize';
+
+const { DATABASE_URL, DB_NAME } = process.env;
+export const { Op } = Sequelize;
 
 // const sequelize = new Sequelize(`${DATABASE_URL}`); // For local testing
 // For Heroku deployment
-const sequelize = new Sequelize(`${DATABASE_URL}`, {
+export const sequelize = new Sequelize(`${DATABASE_URL}`, {
   dialectOptions: {
     ssl: {
       require: true,
-      rejectUnauthorized: false
-    }
-  }
+      rejectUnauthorized: false,
+    },
+  },
 });
 
-sequelize.authenticate().then(res => {
-  console.log(`Connection established to ${DB}!`);
-}).catch(err => {
-  console.error(`Unable to connect to ${DB}, error: `, err);
+sequelize.authenticate().then(() => {
+  console.log(`Connection established to ${DB_NAME}!`);
+}).catch((err) => {
+  console.error(`Unable to connect to ${DB_NAME}, error: `, err);
 });
-
-module.exports = { sequelize, Op };

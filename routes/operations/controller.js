@@ -1,30 +1,30 @@
-const Contract = require('../models/contracts');
-const Operation = require('../models/operations');
-const { Op } = require('../models');
+import Contract from '../../models/contracts';
+import Operation from '../../models/operations';
+import { Op } from '../../db';
 
-const getOperation = async (req, res) => {
+export const getOperation = async (req, res) => {
   try {
     const { id } = req.params; // Operation id
-    const operation = await Operation.findOne({ where: { id: id } });
+    const operation = await Operation.findOne({ where: { id } });
     res.status(200);
     res.send(operation);
   } catch (error) {
     res.status(500);
     res.send({ error, message: 'Could not get op.' });
   }
-}
+};
 
-const getContractCurrentOp = async (req, res) => {
+export const getContractCurrentOp = async (req, res) => {
   try {
     const { id } = req.params; // Contract id
-    const contract = await Contract.findOne({ where: { id: id } });
+    const contract = await Contract.findOne({ where: { id } });
     // Sould only be one operation with null endDate at a time
     const operation = await contract.getOperations({
       where: {
         endDate: {
-          [Op.eq]: null
-        }
-      }
+          [Op.eq]: null,
+        },
+      },
     });
     res.status(200);
     // Returns array of operations, but there should only be one
@@ -33,18 +33,18 @@ const getContractCurrentOp = async (req, res) => {
     res.status(500);
     res.send({ error, message: 'Could not get current op.' });
   }
-}
+};
 
-const getContractPastOp = async (req, res) => {
+export const getContractPastOp = async (req, res) => {
   try {
     const { id } = req.params; // Contract id
-    const contract = await Contract.findOne({ where: { id: id } });
+    const contract = await Contract.findOne({ where: { id } });
     const operations = await contract.getOperations({
       where: {
         endDate: {
-          [Op.ne]: null
-        }
-      }
+          [Op.ne]: null,
+        },
+      },
     });
     res.status(200);
     res.send(operations);
@@ -52,12 +52,12 @@ const getContractPastOp = async (req, res) => {
     res.status(500);
     res.send({ error, message: 'Could not get past operations.' });
   }
-}
+};
 
-const createOperation = async (req, res) => {
+export const createOperation = async (req, res) => {
   try {
     const { id } = req.params; // Contract id
-    const contract = await Contract.findOne({ where: { id: id } });
+    const contract = await Contract.findOne({ where: { id } });
     const { name, objectives, startDate } = req.body;
     const newOperation = { name, objectives, startDate };
     const operation = await Operation.create(newOperation);
@@ -67,14 +67,15 @@ const createOperation = async (req, res) => {
     res.status(500);
     res.send({ error, message: 'Could not create op.' });
   }
-}
+};
 
-const updateOperation = async (req, res) => {
+export const updateOperation = async (req, res) => {
   try {
     const { id } = req.params; // Operation id
-    const operation = await Operation.findOne({ where: { id: id } });
-    const { name, objectives, startDate, endDate } = req.body;
-    console.log('req.body: ', req.body);
+    const operation = await Operation.findOne({ where: { id } });
+    const {
+      name, objectives, startDate, endDate,
+    } = req.body;
     operation.name = name;
     operation.objectives = objectives;
     operation.startDate = startDate;
@@ -85,12 +86,4 @@ const updateOperation = async (req, res) => {
     res.status(500);
     res.send({ error, message: 'Could not update contract.' });
   }
-}
-
-module.exports = {
-  getOperation,
-  getContractCurrentOp,
-  getContractPastOp,
-  createOperation,
-  updateOperation
-}
+};

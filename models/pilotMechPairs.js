@@ -1,12 +1,12 @@
-const { sequelize } = require('./index');
-const { DataTypes } = require('sequelize');
+import { DataTypes } from 'sequelize';
+import { sequelize } from './index';
 
 // This is the junction table between pilots and mechs
 const PilotMechPair = sequelize.define('PilotMechPair', {
   unionDate: DataTypes.DATE,
-  divorceDate: DataTypes.DATE
+  divorceDate: DataTypes.DATE,
 });
 
 PilotMechPair.sync();
 
-module.exports = PilotMechPair;
+export default PilotMechPair;

@@ -1,18 +1,18 @@
-const { sequelize } = require('./index');
-const { DataTypes } = require('sequelize');
+import { DataTypes } from 'sequelize';
+import { sequelize } from './index';
 
 const Turn = sequelize.define('Turn', {
   turnNum: {
     type: DataTypes.INTEGER,
-    allowNull: false
+    allowNull: false,
   },
   // Duration of a turn in seconds
   duration: {
     type: DataTypes.INTEGER,
-    defaultValue: 10
-  }
+    defaultValue: 10,
+  },
 });
 
 Turn.sync();
 
-module.exports = Turn;
+export default Turn;

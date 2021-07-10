@@ -1,5 +1,5 @@
-const { sequelize } = require('./index');
-const { DataTypes } = require('sequelize');
+import { DataTypes } from 'sequelize';
+import { sequelize } from './index';
 
 // This is the junction table between mechs and turns
 const TurnDetail = sequelize.define('TurnDetail', {
@@ -7,9 +7,9 @@ const TurnDetail = sequelize.define('TurnDetail', {
   mechOverheatShutdown: DataTypes.INTEGER,
   mechDamageArmor: DataTypes.INTEGER,
   mechDamageStructure: DataTypes.INTEGER,
-  pilotEdge: DataTypes.INTEGER
+  pilotEdge: DataTypes.INTEGER,
 });
 
 TurnDetail.sync();
 
-module.exports = TurnDetail;
+export default TurnDetail;

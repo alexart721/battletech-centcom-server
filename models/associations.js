@@ -1,13 +1,13 @@
-const User = require('./users');
-const Campaign = require('./campaigns');
-const CampaignDetail = require('./campaignDetails');
-const Pilot = require('./pilots');
-const Mech = require('./mechs');
-const PilotMechPair = require('./pilotMechPairs');
-const Contract = require('./contracts');
-const Operation = require('./operations');
-const Turn = require('./turns');
-const TurnDetail = require('./turnDetails');
+import User from './users';
+import Campaign from './campaigns';
+import CampaignDetail from './campaignDetails';
+import Pilot from './pilots';
+import Mech from './mechs';
+import PilotMechPair from './pilotMechPairs';
+import Contract from './contracts';
+import Operation from './operations';
+import Turn from './turns';
+import TurnDetail from './turnDetails';
 
 const associate = () => {
   // User - Campaign associations
@@ -45,6 +45,6 @@ const associate = () => {
   // Operation - Turn associations
   Operation.hasMany(Turn);
   Turn.belongsTo(Operation);
-}
+};
 
-module.exports = associate;
+export default associate;

@@ -1,59 +1,61 @@
-const Campaign = require('../models/campaigns');
-const { Op } = require('../models');
+import Campaign from '../../models/campaigns';
+import User from '../../models/users';
+import { Op } from '../../db';
 
-const getCampaign = async (req, res) => {
+export const getCampaign = async (req, res) => {
   try {
     const { id } = req.params;
-    const campaign = await Campaign.findOne({ where: { id: id } });
+    const campaign = await Campaign.findOne({ where: { id } });
     res.status(200);
     res.send(campaign);
   } catch (error) {
     res.status(500);
     res.send({ error, message: 'Could not get campaign.' });
   }
-}
+};
 
-const getAllCampaigns = async (req, res) => {
+export const getAllCampaigns = async (req, res) => {
   try {
-    const user = req.user;
-    const campaigns = user.getCampaigns();
+    const { user } = req;
+    const dbUser = await User.findOne({ where: { id: user.id } });
+    const campaigns = dbUser.getCampaigns();
     res.status(200);
     res.send(campaigns);
   } catch (error) {
     res.status(500);
     res.send({ error, message: 'Could not get campaign.' });
   }
-}
+};
 
-const getCurrentCampaigns = async (req, res) => {
+export const getCurrentCampaigns = async (req, res) => {
   try {
-    const user = req.user;
-    // For posterity you should get the user from the database
-    const campaigns = await user.getCampaigns({
+    const { user } = req;
+    const dbUser = await User.findOne({ where: { id: user.id } });
+    const campaigns = await dbUser.getCampaigns({
       where: {
         endDate: {
-          [Op.eq]: null
-        }
-      }
+          [Op.eq]: null,
+        },
+      },
     });
-    console.log(campaigns);
     res.status(200);
     res.send(campaigns);
   } catch (error) {
     res.status(500);
     res.send({ error, message: 'Could not get current campaigns.' });
   }
-}
+};
 
-const getPastCampaigns = async (req, res) => {
+export const getPastCampaigns = async (req, res) => {
   try {
-    const user = req.user;
-    const campaigns = await user.getCampaigns({
+    const { user } = req;
+    const dbUser = await User.findOne({ where: { id: user.id } });
+    const campaigns = await dbUser.getCampaigns({
       where: {
         endDate: {
-          [Op.ne]: null
-        }
-      }
+          [Op.ne]: null,
+        },
+      },
     });
     res.status(200);
     res.send(campaigns);
@@ -61,27 +63,28 @@ const getPastCampaigns = async (req, res) => {
     res.status(500);
     res.send({ error, message: 'Could not get past campaigns.' });
   }
-}
+};
 
-const createCampaign = async (req, res) => {
-  const user = req.user;
+export const createCampaign = async (req, res) => {
+  const { user } = req;
   try {
     const { startDate } = req.body;
     const campaign = await Campaign.create({
-      ...req.body
+      ...req.body,
     });
-    await campaign.addUser(user, { through: { joinDate: startDate } });
+    const dbUser = await User.findOne({ where: { id: user.id } });
+    await campaign.addUser(dbUser, { through: { joinDate: startDate } });
     res.status(201).send(campaign);
   } catch (error) {
     res.status(500);
     res.send({ error, message: 'Could not create campaign.' });
   }
-}
+};
 
-const updateCampaign = async (req, res) => {
+export const updateCampaign = async (req, res) => {
   try {
     const { id } = req.params;
-    const campaign = await Campaign.findOne({ where: { id: id } });
+    const campaign = await Campaign.findOne({ where: { id } });
     const { name, startDate, endDate } = req.body;
     campaign.name = name;
     campaign.startDate = startDate;
@@ -93,13 +96,4 @@ const updateCampaign = async (req, res) => {
     res.status(500);
     res.send({ error, message: 'Could not update user.' });
   }
-}
-
-module.exports = {
-  getCampaign,
-  getAllCampaigns,
-  getCurrentCampaigns,
-  getPastCampaigns,
-  createCampaign,
-  updateCampaign
-}
+};
